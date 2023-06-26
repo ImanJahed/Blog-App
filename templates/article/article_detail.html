@@ -1,0 +1,44 @@
+{% extends '_base.html' %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+
+
+
+{% block title %}
+Article Detail
+{% endblock title %}
+
+
+{% block content %}
+
+<div class="article-entry">
+    <h2>{{article.title}}</h2>
+    <p>{{article.author}} | {{article.created_date|naturaltime}}</p>
+    <p>{{article.body}}</p>
+</div>
+<hr>
+{% if article.comment_set.all.count > 1 %}
+<h4>Comments</h4>
+{% else %}
+<h4>Comment</h4>
+{% endif %}
+{% for comment in article.comment_set.all %}
+<p>{{ comment.author }} &minus; {{ comment }}</p>
+{% endfor %}
+<hr>
+
+<div class="form-control mb-5">
+    <form action="" method="post">
+        {% csrf_token %}
+        {{form|crispy}}
+        <input type="submit" value="Send" class="btn btn-success" name="" id="">
+    </form>
+</div>
+<p>
+    <a href="{% url 'article-edit' article.pk %}" class="btn btn-info">Edit</a>
+    <a href="{% url 'article-delete' article.pk %}" class="btn btn-danger">Delete</a>
+</p>
+<p>
+    Back To <a href="{% url 'article-list' %}">All Article</a>
+</p>
+{% endblock content %}

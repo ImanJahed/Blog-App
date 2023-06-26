@@ -1,0 +1,43 @@
+{% extends '_base.html' %}
+{% load humanize %}
+{% block title %}
+Articles List
+{% endblock title %}
+
+{% block content %}
+
+{% for article in article_list %}
+
+<div class="card">
+    <div class="card-header">
+        <span>{{article.title}}</span>
+        <span>{{article.author}} | {{article.created_date|naturaltime}}</span>
+    </div>
+    <div class="cart-body">
+        {{article.body|truncatechars:100}}
+    </div>
+    <div class="card-header">
+        {% if article.comment_set.all.count > 1 %}
+        <span>Comments</span> 
+        {% else %}
+        Comment
+        {% endif %}
+    </div>
+    {% for comment in article.comment_set.all %}
+    <div class="cart-body">
+        <ul class="list-group">
+            <li class="list-group-item" aria-current="true">{{comment.author}} &minus; {{comment}}</li>
+          </ul>
+    </div>
+    
+    {% endfor %}
+    <div class="cart-footer text-center text-muted">
+        <a href="{% url 'article-edit' article.pk %}">Edit</a>
+        <a href="{% url 'article-delete' article.pk %}">Delete</a>
+    </div>
+</div>
+
+
+{% endfor %}
+
+{% endblock content %}
